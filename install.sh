@@ -25,11 +25,10 @@ if [[ "$VERSION" == "latest" ]]; then
   VERSION="$(curl -fsSL "$API" | grep -m1 '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')"
 fi
 
-# Strip leading v for archive name; GoReleaser uses v in tag but archive may include it
 TAG="$VERSION"
 VER="${VERSION#v}"
 
-ARCHIVE="revenant_${TAG}_${OS}_${ARCH}"
+ARCHIVE="revenant_${VER}_${OS}_${ARCH}"
 if [[ "$OS" == "windows" ]]; then
   ARCHIVE="${ARCHIVE}.zip"
   EXTRACT="unzip -o"
