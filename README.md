@@ -20,7 +20,7 @@ Add to `.github/workflows/revenant.yml`:
     DATABASE_URL: ${{ secrets.DATABASE_URL }}
 ```
 
-**List on GitHub Marketplace:** [Publish steps](MARKETPLACE.md) · [Marketplace search](https://github.com/marketplace?type=actions&query=revenant)
+**List on GitHub Marketplace:** open your repo → blue banner **Draft a release** → check **Publish this Action to the GitHub Marketplace**. See [MARKETPLACE.md](MARKETPLACE.md) (the old `/marketplace/actions/new` URL no longer works).
 
 ## Inputs
 
