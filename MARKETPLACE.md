@@ -17,7 +17,7 @@ Click that button. (Same as: **Releases** → **Draft a new release**.)
 - [x] `action.yml` at repo root (must be `.yml`, not `.yaml`)
 - [x] `name`, `description`, `branding` in `action.yml`
 - [x] README with usage examples
-- [x] Tags: `v1.0.0`, `v1.0.1`, `v1.0.2`
+- [x] Tags: `v1.0.0`, `v1.0.1`, `v1.0.2`, `v1.0.3`
 - [x] CLI binaries: https://github.com/277pawan/revenant-cli/releases
 
 ## Publish steps (follow in order)
@@ -30,10 +30,10 @@ Or: **Releases** (right sidebar) → **Draft a new release**
 
 ### 2. Choose a tag
 
-- **Option A:** Pick existing tag `v1.0.2` (already on GitHub)
-- **Option B:** Create `v1.0.3` if you want a fresh marketplace release
+- **Option A:** Pick existing tag `v1.0.3` (already on GitHub)
+- **Option B:** Create a new tag (e.g. `v1.0.4`) for the next marketplace release
 
-Release title example: `Revenant Action v1.0.2`
+Release title example: `Revenant Action v1.0.3`
 
 ### 3. Enable Marketplace
 
@@ -78,7 +78,7 @@ Your listing will be at a URL like:
 ## After publish — how users install it
 
 ```yaml
-- uses: 277pawan/revenant-action@v1.0.2
+- uses: 277pawan/revenant-action@v1.0.3
   with:
     version: v0.1.1
     config: revenant.yaml
@@ -89,7 +89,7 @@ Your listing will be at a URL like:
 ## Updating later
 
 1. Push changes to `main`
-2. **Draft a new release** with a new tag (e.g. `v1.0.3`)
+2. **Draft a new release** with a new tag (e.g. `v1.0.4`)
 3. Check **Publish this Action to the GitHub Marketplace** again
 4. **Publish release**
 
@@ -102,6 +102,6 @@ https://docs.github.com/en/actions/how-tos/create-and-publish-actions/publish-in
 | What | Version | Repo |
 |------|---------|------|
 | CLI binary | `v0.1.1`, `v0.2.0`, … | revenant-cli |
-| Action wrapper | `v1.0.2`, `v1.1.0`, … | revenant-action |
+| Action wrapper | `v1.0.3`, `v1.1.0`, … | revenant-action |
 
 Users pin the **action** tag; the action downloads the **CLI** via `with: version: v0.1.1`.

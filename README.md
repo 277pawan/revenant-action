@@ -12,7 +12,7 @@ Works with Node, Python, Go, Rails, Java, or anything else — Revenant only con
 Add to `.github/workflows/revenant.yml`:
 
 ```yaml
-- uses: 277pawan/revenant-action@v1.0.2
+- uses: 277pawan/revenant-action@v1.0.3
   with:
     version: v0.1.1
     config: revenant.yaml
@@ -29,7 +29,7 @@ Add to `.github/workflows/revenant.yml`:
 | `version` | `v0.1.1` | CLI release from [revenant-cli releases](https://github.com/277pawan/revenant-cli/releases) |
 | `repo` | `277pawan/revenant-cli` | Repo that publishes CLI binaries |
 | `config` | `revenant.yaml` | Config path (for `verify`) |
-| `command` | `verify` | `verify`, `init`, `reap`, or `snapshot` |
+| `command` | `verify` | `verify`, `doctor`, `init`, `reap`, or `snapshot` |
 | `args` | | Extra CLI flags |
 
 ## Examples
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: 277pawan/revenant-action@v1.0.2
+      - uses: 277pawan/revenant-action@v1.0.3
         with:
           version: v0.1.1
           config: revenant.yaml
@@ -59,7 +59,7 @@ jobs:
 ### AWS RDS snapshot restore
 
 ```yaml
-- uses: 277pawan/revenant-action@v1.0.2
+- uses: 277pawan/revenant-action@v1.0.3
   with:
     version: v0.1.1
     config: revenant-aws.yaml
@@ -72,7 +72,7 @@ jobs:
     SANDBOX_PASSWORD: ${{ secrets.SANDBOX_PASSWORD }}
     SANDBOX_DBNAME: postgres
 
-- uses: 277pawan/revenant-action@v1.0.2
+- uses: 277pawan/revenant-action@v1.0.3
   if: always()
   with:
     version: v0.1.1
@@ -87,7 +87,7 @@ jobs:
 ### Scaffold config from a live database
 
 ```yaml
-- uses: 277pawan/revenant-action@v1.0.2
+- uses: 277pawan/revenant-action@v1.0.3
   with:
     version: v0.1.1
     command: init
