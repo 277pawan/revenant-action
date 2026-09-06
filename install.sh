@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-VERSION="${REVENANT_VERSION:-v0.1.0}"
+VERSION="${REVENANT_VERSION:-v0.1.1}"
 REPO="${REVENANT_REPO:-277pawan/revenant-cli}"
 INSTALL_DIR="${RUNNER_TEMP}/revenant"
 mkdir -p "$INSTALL_DIR"

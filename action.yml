@@ -7,9 +7,9 @@ branding:
 
 inputs:
   version:
-    description: Revenant CLI release tag (e.g. v0.1.0) or "latest"
+    description: Revenant CLI release tag (e.g. v0.1.1) or "latest"
     required: false
-    default: v0.1.0
+    default: v0.1.1
   repo:
     description: GitHub repo that publishes CLI releases (owner/name)
     required: false
@@ -19,7 +19,7 @@ inputs:
     required: false
     default: revenant.yaml
   command:
-    description: CLI subcommand — verify, init, reap, or snapshot
+    description: CLI subcommand — verify, init, doctor, reap, or snapshot
     required: false
     default: verify
   args:
@@ -49,10 +49,7 @@ runs:
           verify)
             exec "$BIN" verify --config "$CONFIG" $ARGS
             ;;
-          init)
-            exec "$BIN" init $ARGS
-            ;;
-          reap|snapshot|migrate)
+          init|doctor|reap|snapshot|migrate)
             exec "$BIN" "$CMD" $ARGS
             ;;
           *)

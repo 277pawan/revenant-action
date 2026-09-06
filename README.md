@@ -14,7 +14,7 @@ Add to `.github/workflows/revenant.yml`:
 ```yaml
 - uses: 277pawan/revenant-action@v1.0.2
   with:
-    version: v0.1.0
+    version: v0.1.1
     config: revenant.yaml
   env:
     DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -26,7 +26,7 @@ Add to `.github/workflows/revenant.yml`:
 
 | Input | Default | Description |
 |-------|---------|-------------|
-| `version` | `v0.1.0` | CLI release from [revenant-cli releases](https://github.com/277pawan/revenant-cli/releases) |
+| `version` | `v0.1.1` | CLI release from [revenant-cli releases](https://github.com/277pawan/revenant-cli/releases) |
 | `repo` | `277pawan/revenant-cli` | Repo that publishes CLI binaries |
 | `config` | `revenant.yaml` | Config path (for `verify`) |
 | `command` | `verify` | `verify`, `init`, `reap`, or `snapshot` |
@@ -50,7 +50,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: 277pawan/revenant-action@v1.0.2
         with:
-          version: v0.1.0
+          version: v0.1.1
           config: revenant.yaml
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -61,7 +61,7 @@ jobs:
 ```yaml
 - uses: 277pawan/revenant-action@v1.0.2
   with:
-    version: v0.1.0
+    version: v0.1.1
     config: revenant-aws.yaml
     command: verify
   env:
@@ -75,7 +75,7 @@ jobs:
 - uses: 277pawan/revenant-action@v1.0.2
   if: always()
   with:
-    version: v0.1.0
+    version: v0.1.1
     command: reap
     args: --max-age 4h --region us-east-1
   env:
@@ -89,7 +89,7 @@ jobs:
 ```yaml
 - uses: 277pawan/revenant-action@v1.0.2
   with:
-    version: v0.1.0
+    version: v0.1.1
     command: init
     args: --plan my-app --force -o revenant.yaml
   env:

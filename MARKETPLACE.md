@@ -80,7 +80,7 @@ Your listing will be at a URL like:
 ```yaml
 - uses: 277pawan/revenant-action@v1.0.2
   with:
-    version: v0.1.0
+    version: v0.1.1
     config: revenant.yaml
   env:
     DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -101,7 +101,7 @@ https://docs.github.com/en/actions/how-tos/create-and-publish-actions/publish-in
 
 | What | Version | Repo |
 |------|---------|------|
-| CLI binary | `v0.1.0`, `v0.2.0`, … | revenant-cli |
+| CLI binary | `v0.1.1`, `v0.2.0`, … | revenant-cli |
 | Action wrapper | `v1.0.2`, `v1.1.0`, … | revenant-action |
 
-Users pin the **action** tag; the action downloads the **CLI** via `with: version: v0.1.0`.
+Users pin the **action** tag; the action downloads the **CLI** via `with: version: v0.1.1`.
