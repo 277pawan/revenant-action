@@ -12,7 +12,7 @@ Works with Node, Python, Go, Rails, Java, or anything else — Revenant only con
 Add to `.github/workflows/revenant.yml`:
 
 ```yaml
-- uses: 277pawan/revenant-action@v1.0.1
+- uses: 277pawan/revenant-action@v1.0.2
   with:
     version: v0.1.0
     config: revenant.yaml
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: 277pawan/revenant-action@v1.0.1
+      - uses: 277pawan/revenant-action@v1.0.2
         with:
           version: v0.1.0
           config: revenant.yaml
@@ -59,7 +59,7 @@ jobs:
 ### AWS RDS snapshot restore
 
 ```yaml
-- uses: 277pawan/revenant-action@v1.0.1
+- uses: 277pawan/revenant-action@v1.0.2
   with:
     version: v0.1.0
     config: revenant-aws.yaml
@@ -72,7 +72,7 @@ jobs:
     SANDBOX_PASSWORD: ${{ secrets.SANDBOX_PASSWORD }}
     SANDBOX_DBNAME: postgres
 
-- uses: 277pawan/revenant-action@v1.0.1
+- uses: 277pawan/revenant-action@v1.0.2
   if: always()
   with:
     version: v0.1.0
@@ -87,7 +87,7 @@ jobs:
 ### Scaffold config from a live database
 
 ```yaml
-- uses: 277pawan/revenant-action@v1.0.1
+- uses: 277pawan/revenant-action@v1.0.2
   with:
     version: v0.1.0
     command: init

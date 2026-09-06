@@ -39,7 +39,7 @@ Users find it at:
 They add it with:
 
 ```yaml
-- uses: 277pawan/revenant-action@v1.0.1
+- uses: 277pawan/revenant-action@v1.0.2
 ```
 
 ## Updating the listing
