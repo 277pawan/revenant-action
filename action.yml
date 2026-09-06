@@ -1,28 +1,29 @@
-name: Revenant
-description: Download a Revenant release binary and run verify, init, reap, or snapshot.
+name: Revenant Restore Validation
+description: Prove PostgreSQL backups restore correctly — run checks locally or restore AWS RDS snapshots in CI. Language-agnostic.
+author: 277pawan
 branding:
   icon: database
   color: blue
 
 inputs:
   version:
-    description: Revenant CLI release tag to install (e.g. v0.1.0) or "latest"
+    description: Revenant CLI release tag (e.g. v0.1.0) or "latest"
     required: false
     default: v0.1.0
   repo:
-    description: GitHub repo that publishes releases (owner/name)
+    description: GitHub repo that publishes CLI releases (owner/name)
     required: false
     default: 277pawan/revenant-cli
   config:
-    description: Path to revenant.yaml (for verify command)
+    description: Path to revenant.yaml (used by verify)
     required: false
     default: revenant.yaml
   command:
-    description: revenant subcommand — verify, init, reap, snapshot
+    description: CLI subcommand — verify, init, reap, or snapshot
     required: false
     default: verify
   args:
-    description: Extra CLI flags after the subcommand (e.g. "--max-age 4h --region us-east-1")
+    description: Extra flags after the subcommand (e.g. "--max-age 4h --region us-east-1")
     required: false
     default: ""
 
