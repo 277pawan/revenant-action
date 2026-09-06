@@ -46,7 +46,12 @@ curl -fsSL -o "$TMP" "$URL"
 mkdir -p "${INSTALL_DIR}/extract"
 cd "${INSTALL_DIR}/extract"
 $EXTRACT "$TMP"
-chmod +x revenant 2>/dev/null || true
-mv revenant "${INSTALL_DIR}/revenant"
+BIN="$(find "${INSTALL_DIR}/extract" -name revenant -type f | head -1)"
+if [[ -z "$BIN" ]]; then
+  echo "revenant binary not found in ${ARCHIVE}" >&2
+  exit 1
+fi
+chmod +x "$BIN"
+mv "$BIN" "${INSTALL_DIR}/revenant"
 echo "${INSTALL_DIR}" >> "$GITHUB_PATH"
 echo "Revenant installed to ${INSTALL_DIR}/revenant"
