@@ -15,7 +15,7 @@ inputs:
     required: false
     default: 277pawan/revenant-cli
   config:
-    description: Path to revenant.yaml (used by verify)
+    description: Path to revenant.yaml (used by verify, snapshot, doctor)
     required: false
     default: revenant.yaml
   command:
@@ -46,10 +46,10 @@ runs:
         CONFIG="${{ inputs.config }}"
         BIN="${RUNNER_TEMP}/revenant/revenant"
         case "$CMD" in
-          verify)
-            exec "$BIN" verify --config "$CONFIG" $ARGS
+          verify|snapshot|doctor)
+            exec "$BIN" "$CMD" --config "$CONFIG" $ARGS
             ;;
-          init|doctor|reap|snapshot|migrate)
+          init|reap|migrate)
             exec "$BIN" "$CMD" $ARGS
             ;;
           *)
