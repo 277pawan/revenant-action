@@ -7,19 +7,18 @@ branding:
 
 inputs:
   version:
-    description: Revenant CLI release tag (e.g. v0.1.1) or "latest"
+    description: Revenant CLI release tag or "latest"
     required: false
-    default: v0.1.1
-  repo:
-    description: GitHub repo that publishes CLI releases (owner/name)
+    default: latest
+  github-token:
+    description: GitHub token used only to access the private Revenant CLI release
     required: false
-    default: 277pawan/revenant-cli
   config:
-    description: Path to revenant.yaml (used by verify, snapshot, doctor)
+    description: Path to revenant.yaml (used by verify, doctor, and private snapshot)
     required: false
     default: revenant.yaml
   command:
-    description: CLI subcommand — verify, init, doctor, reap, or snapshot
+    description: Free commands are verify, doctor, init, contract; private mode also supports snapshot, reap, and migrate
     required: false
     default: verify
   args:
@@ -34,26 +33,38 @@ runs:
       shell: bash
       env:
         REVENANT_VERSION: ${{ inputs.version }}
-        REVENANT_REPO: ${{ inputs.repo }}
+        REVENANT_GITHUB_TOKEN: ${{ inputs.github-token }}
       run: bash "${{ github.action_path }}/install.sh"
 
     - name: Run Revenant
       shell: bash
+      env:
+        REVENANT_COMMAND: ${{ inputs.command }}
+        REVENANT_ARGS: ${{ inputs.args }}
+        REVENANT_CONFIG: ${{ inputs.config }}
       run: |
         set -euo pipefail
-        CMD="${{ inputs.command }}"
-        ARGS="${{ inputs.args }}"
-        CONFIG="${{ inputs.config }}"
         BIN="${RUNNER_TEMP}/revenant/revenant"
-        case "$CMD" in
-          verify|snapshot|doctor)
-            exec "$BIN" "$CMD" --config "$CONFIG" $ARGS
+        read -r -a ARGS <<< "${REVENANT_ARGS:-}"
+        case "$REVENANT_COMMAND" in
+          verify|doctor)
+            exec "$BIN" "$REVENANT_COMMAND" --config "$REVENANT_CONFIG" "${ARGS[@]}"
             ;;
-          init|reap|migrate)
-            exec "$BIN" "$CMD" $ARGS
+          init|contract)
+            exec "$BIN" "$REVENANT_COMMAND" "${ARGS[@]}"
+            ;;
+          snapshot|reap|migrate)
+            if [[ "${REVENANT_CLI_SOURCE:-free}" != "private" ]]; then
+              echo "Command '$REVENANT_COMMAND' is only available with the authenticated private CLI." >&2
+              exit 1
+            fi
+            if [[ "$REVENANT_COMMAND" == "snapshot" ]]; then
+              exec "$BIN" snapshot --config "$REVENANT_CONFIG" "${ARGS[@]}"
+            fi
+            exec "$BIN" "$REVENANT_COMMAND" "${ARGS[@]}"
             ;;
           *)
-            echo "Unknown command: $CMD" >&2
+            echo "Unknown Revenant command: $REVENANT_COMMAND" >&2
             exit 1
             ;;
         esac

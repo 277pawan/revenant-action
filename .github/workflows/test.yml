@@ -1,0 +1,20 @@
+name: Action tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  installer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check shell syntax
+        run: bash -n install.sh tests/install.test.sh
+      - name: Test distribution selection and token safety
+        run: bash tests/install.test.sh

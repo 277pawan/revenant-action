@@ -78,10 +78,7 @@ Your listing will be at a URL like:
 ## After publish — how users install it
 
 ```yaml
-- uses: 277pawan/revenant-action@v1.0.3
-  with:
-    version: v0.1.1
-    config: revenant.yaml
+- uses: 277pawan/revenant-action@v1
   env:
     DATABASE_URL: ${{ secrets.DATABASE_URL }}
 ```
@@ -101,7 +98,8 @@ https://docs.github.com/en/actions/how-tos/create-and-publish-actions/publish-in
 
 | What | Version | Repo |
 |------|---------|------|
-| CLI binary | `v0.1.1`, `v0.2.0`, … | revenant-cli |
-| Action wrapper | `v1.0.3`, `v1.1.0`, … | revenant-action |
+| Free CLI binary | version tags | freerev-cli |
+| Private CLI binary | version tags | revenant-cli (explicit token only) |
+| Action wrapper | `v1.*` release tags | revenant-action |
 
-Users pin the **action** tag; the action downloads the **CLI** via `with: version: v0.1.1`.
+Users pin the **action** tag. The action downloads the latest free CLI by default; Revenant-owned workflows can select a private CLI version with `github-token`.
