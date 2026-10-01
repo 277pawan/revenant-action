@@ -12,7 +12,7 @@ The free CLI checks a directly reachable PostgreSQL database. The optional authe
 Add to `.github/workflows/revenant.yml`:
 
 ```yaml
-- uses: 277pawan/revenant-action@v1
+- uses: 277pawan/revenant-action@v1.0.4
   env:
     DATABASE_URL: ${{ secrets.DATABASE_URL }}
 ```
@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: 277pawan/revenant-action@v1
+      - uses: 277pawan/revenant-action@v1.0.4
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 ```
@@ -62,7 +62,7 @@ permissions:
 
 steps:
   - uses: actions/checkout@v4
-  - uses: 277pawan/revenant-action@v1
+  - uses: 277pawan/revenant-action@v1.0.4
     with:
       version: latest
       github-token: ${{ secrets.REVENANT_CLI_TOKEN }}
@@ -80,7 +80,7 @@ Normal users do not need this token or private-repository access. Without `githu
 
 ```yaml
 steps:
-  - uses: 277pawan/revenant-action@v1
+  - uses: 277pawan/revenant-action@v1.0.4
     with:
       version: latest
       github-token: ${{ secrets.REVENANT_CLI_TOKEN }}
@@ -94,7 +94,7 @@ steps:
       SANDBOX_PASSWORD: ${{ secrets.SANDBOX_PASSWORD }}
       SANDBOX_DBNAME: postgres
 
-  - uses: 277pawan/revenant-action@v1
+  - uses: 277pawan/revenant-action@v1.0.4
     if: always()
     with:
       version: latest
@@ -110,7 +110,7 @@ steps:
 ### Scaffold config from a live database
 
 ```yaml
-- uses: 277pawan/revenant-action@v1
+- uses: 277pawan/revenant-action@v1.0.4
   with:
     command: init
     args: --plan my-app --force -o revenant.yaml
