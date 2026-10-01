@@ -45,3 +45,11 @@ grep -q "test-secret-token" "$error_file" && fail "token was printed in error ou
   fail "failed private request silently fell back to the free CLI"
 rm -f "$error_file" "${error_file}.json"
 echo "PASS: private failures are clear, redacted, and do not fall back"
+
+for status in 401 403 404; do
+  message="$(report_download_error "$status" 2>&1)"
+  [[ "$message" == *"HTTP ${status}"* || "$message" == *"${status}"* ]] ||
+    fail "HTTP ${status} was not included in private diagnostics"
+  [[ "$message" != *"test-secret-token"* ]] || fail "token was printed in status diagnostics"
+done
+echo "PASS: private HTTP failures are categorized without leaking tokens"

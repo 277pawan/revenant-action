@@ -35,12 +35,24 @@ release_endpoint_for() {
 }
 
 report_download_error() {
+  local http_status="${1:-unknown}"
   if [[ "$REVENANT_CLI_SOURCE" == "private" ]]; then
-    printf '%s\n' \
-      "Failed to access the private Revenant CLI release." \
-      "Verify github-token is configured and has Contents: read access to 277pawan/revenant-cli." >&2
+    case "$http_status" in
+      401)
+        echo "GitHub rejected github-token (HTTP 401). Check that REVENANT_CLI_TOKEN is valid and not expired." >&2
+        ;;
+      403)
+        echo "GitHub denied private CLI access (HTTP 403). Grant the token Contents: read and check organization SSO/policy restrictions." >&2
+        ;;
+      404)
+        echo "Private CLI release, tag, or asset was not found, or the token cannot see 277pawan/revenant-cli (HTTP 404). Check repository access and that the requested release has assets." >&2
+        ;;
+      *)
+        echo "Failed to access the private Revenant CLI release (HTTP ${http_status}). Verify token access and that the requested release exists." >&2
+        ;;
+    esac
   else
-    printf '%s\n' "Failed to download a release from the public Revenant Free CLI." >&2
+    echo "Failed to download a release from the public Revenant Free CLI (HTTP ${http_status}). Check that a release and matching asset exist." >&2
   fi
 }
 
@@ -49,6 +61,7 @@ request_github_file() {
   local output_path="$2"
   local accept="$3"
   local auth_config=""
+  local status_file http_status curl_status=0
 
   if [[ -n "${REVENANT_GITHUB_TOKEN:-}" ]]; then
     auth_config="$(mktemp)"
@@ -61,12 +74,17 @@ request_github_file() {
     curl_args+=(--config "$auth_config")
   fi
 
-  if ! "$CURL_BIN" "${curl_args[@]}" "$url" --output "$output_path" 2>/dev/null; then
-    [[ -z "$auth_config" ]] || rm -f "$auth_config"
-    report_download_error
+  status_file="$(mktemp)"
+  "$CURL_BIN" "${curl_args[@]}" --write-out '%{http_code}' \
+    "$url" --output "$output_path" > "$status_file" 2>/dev/null || curl_status=$?
+  http_status="$(<"$status_file")"
+  rm -f "$status_file"
+  [[ -z "$auth_config" ]] || rm -f "$auth_config"
+
+  if [[ "$curl_status" -ne 0 || ! "$http_status" =~ ^2[0-9][0-9]$ ]]; then
+    report_download_error "${http_status:-unknown}"
     return 1
   fi
-  [[ -z "$auth_config" ]] || rm -f "$auth_config"
 }
 
 main() {
@@ -102,7 +120,7 @@ main() {
 
   local tag version_number
   if ! tag="$(jq -er '.tag_name | select(type == "string" and length > 0)' "$release_file" 2>/dev/null)"; then
-    report_download_error
+    report_download_error 404
     return 1
   fi
   version_number="${tag#v}"
@@ -115,7 +133,7 @@ main() {
   archive="revenant_${version_number}_${os}_${arch}.${extension}"
 
   if ! asset_id="$(jq -er --arg name "$archive" '.assets[] | select(.name == $name) | .id' "$release_file" 2>/dev/null)"; then
-    report_download_error
+    report_download_error 404
     return 1
   fi
 
