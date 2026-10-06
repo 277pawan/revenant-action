@@ -39,20 +39,20 @@ report_download_error() {
   if [[ "$REVENANT_CLI_SOURCE" == "private" ]]; then
     case "$http_status" in
       401)
-        echo "GitHub rejected github-token (HTTP 401). Check that REVENANT_CLI_TOKEN is valid and not expired." >&2
+        echo "GitHub rejected github-token (HTTP 401). Check that REVENANT_GITHUB_TOKEN is valid and not expired." >&2
         ;;
       403)
-        echo "GitHub denied private CLI access (HTTP 403). Grant the token Contents: read and check organization SSO/policy restrictions." >&2
+        echo "GitHub denied private CLI access (HTTP 403). Grant REVENANT_GITHUB_TOKEN Contents: read and check organization SSO/policy restrictions." >&2
         ;;
       404)
-        echo "Private CLI release, tag, or asset was not found, or the token cannot see 277pawan/revenant-cli (HTTP 404). Check repository access and that the requested release has assets." >&2
+        echo "Private CLI release, tag, or asset was not found, or REVENANT_GITHUB_TOKEN cannot see 277pawan/revenant-cli (HTTP 404). Check repository access and that the requested release has assets." >&2
         ;;
       *)
-        echo "Failed to access the private Revenant CLI release (HTTP ${http_status}). Verify token access and that the requested release exists." >&2
+        echo "Failed to access the private Revenant CLI release (HTTP ${http_status}). Verify REVENANT_GITHUB_TOKEN access and that the requested release exists." >&2
         ;;
     esac
   else
-    echo "Failed to download a release from the public Revenant Free CLI (HTTP ${http_status}). Check that a release and matching asset exist." >&2
+    echo "Failed to download a release from the public Revenant Free CLI (HTTP ${http_status}). Check that a release and matching asset exist on 277pawan/freerev-cli." >&2
   fi
 }
 
@@ -118,7 +118,7 @@ main() {
     return 1
   fi
 
-  local tag version_number
+  local tag version_number binary_name
   if ! tag="$(jq -er '.tag_name | select(type == "string" and length > 0)' "$release_file" 2>/dev/null)"; then
     report_download_error 404
     return 1
@@ -127,12 +127,15 @@ main() {
 
   if [[ "$os" == "windows" ]]; then
     extension=zip
+    binary_name=revenant.exe
   else
     extension=tar.gz
+    binary_name=revenant
   fi
   archive="revenant_${version_number}_${os}_${arch}.${extension}"
 
   if ! asset_id="$(jq -er --arg name "$archive" '.assets[] | select(.name == $name) | .id' "$release_file" 2>/dev/null)"; then
+    echo "Release ${tag} has no asset named ${archive}." >&2
     report_download_error 404
     return 1
   fi
@@ -151,13 +154,14 @@ main() {
   fi
 
   local binary
-  binary="$(find "${install_dir}/extract" -type f -name revenant -print -quit)"
+  binary="$(find "${install_dir}/extract" -type f -name "$binary_name" -print -quit)"
   if [[ -z "$binary" ]]; then
-    echo "The selected Revenant CLI release archive did not contain the binary." >&2
+    echo "The selected Revenant CLI release archive did not contain ${binary_name}." >&2
     return 1
   fi
 
   chmod +x "$binary"
+  # action.yml always executes $RUNNER_TEMP/revenant/revenant
   mv "$binary" "${install_dir}/revenant"
   printf '%s\n' "$install_dir" >> "$GITHUB_PATH"
   printf 'REVENANT_CLI_SOURCE=%s\n' "$REVENANT_CLI_SOURCE" >> "$GITHUB_ENV"
